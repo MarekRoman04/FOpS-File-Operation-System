@@ -9,6 +9,8 @@ DATA HANDLING HEADER
 
 void get_input_data(struct data *);
 
+void get_f_parameter_data(struct data *);
+
 void get_fs_parameter_data(struct data *);
 
 void get_string_data(struct data *);

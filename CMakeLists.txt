@@ -9,6 +9,7 @@ set(SOURCES
     source/data/data.c
     source/data/file.c
     source/error/error.c
+    source/error/debug.c
     )
 
 set(HEADER_FILES

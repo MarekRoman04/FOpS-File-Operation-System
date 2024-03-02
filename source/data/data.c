@@ -29,12 +29,8 @@ void get_input_data(struct data *data)
     input_files.get_files(&input_files);
 
     if (DEBUG)
-    {
-        printf("Found files: %d\n", input_files.file_count);
-        for (int i = 0; i < input_files.file_count; ++i)
-            printf("%s ", input_files.file_paths[i]);
-        printf("\n");
-    }
+        print_found_files(&input_files);
+
     data->data_count = input_files.file_count;
     data->data_lengths = get_file_lengths(input_files.fp_arr, input_files.file_count);
     data->data = get_file_data(input_files.fp_arr, data->data_count, data->data_lengths);
@@ -88,6 +84,25 @@ long *get_string_data_lengths(char **data, int data_count)
     return data_lengths;
 }
 
+void get_f_parameter_data(struct data *data)
+{
+    struct files parameter_files;
+    parameter_files.get_files = &get_parameter_files;
+    parameter_files.get_files(&parameter_files);
+    if (parameter_files.file_count > 1)
+        printf("-f takes only 1 parameter file, ignoring other files!\n");
+
+    data->data_count = 0;
+    if (parameter_files.file_count)
+        get_f_parameter_file_data(data, parameter_files.fp_arr[0]);
+
+    if (!data->data_count)
+    {
+        data->get_data = &get_string_data;
+        data->get_data(data);
+    }
+}
+
 void get_fs_parameter_data(struct data *data)
 {
     struct files parameter_files;
@@ -107,17 +122,8 @@ void get_fs_parameter_data(struct data *data)
     string_data.data_lengths = get_string_data_lengths(string_data.data, string_data.data_count);
 
     if (DEBUG)
-    {
-        printf("String data: %d\n", string_data.data_count);
-        printf("Data lengths: ");
-        for (int i = 0; i < string_data.data_count; ++i)
-            printf("%ld ", string_data.data_lengths[i]);
-        printf("\nData: \n");
-        for (int i = 0; i < string_data.data_count; ++i)
-            printf("%s", string_data.data[i]);
-        printf("\n");
-    }
-    
+        print_string_data(&string_data);
+
     if (!data->data_count && !string_data.data_count)
         error_missing_parameter();
     merge_data_struct(data, &string_data);

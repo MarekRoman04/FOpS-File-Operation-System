@@ -61,26 +61,7 @@ void process_args(int argc, char *argv[])
     parameter_args.get_args(&parameter_args, operation_index + 1, argc, argv);
 
     if (DEBUG)
-    {
-        printf("Input args: %d\n", input_args.args_len);
-        printf("Args: ");
-        for (int i = 0; i < input_args.args_len; ++i)
-        {
-            printf("%s ", input_args.args[i]);
-        }
-        printf("\n");
-
-        printf("Operation: %s", operation);
-        printf("\n");
-
-        printf("Parameter args: %d\n", parameter_args.args_len);
-        printf("Args: ");
-        for (int i = 0; i < parameter_args.args_len; ++i)
-        {
-            printf("%s ", parameter_args.args[i]);
-        }
-        printf("\n");
-    }
+        print_args(&input_args, &parameter_args, operation);
 }
 
 void start_operation()
@@ -88,17 +69,21 @@ void start_operation()
     struct data input_data;
     input_data.get_data = &get_input_data;
     input_data.get_data(&input_data);
-    
+
     free_args(&input_args);
 
     struct data parameter_data;
-    
+
     if (!strcmp(operation, "-f"))
         find_words(&input_data, &parameter_data);
+    else if (!strcmp(operation, "-fAll"))
+        find_all_words(&input_data, &parameter_data);
+    else if (!strcmp(operation, "-fc"))
+        find_words_count(&input_data, &parameter_data);    
     else if (!strcmp(operation, "-fs"))
         find_string(&input_data, &parameter_data);
     else if (!strcmp(operation, "-fsAll"))
-        find_all_strings(&input_data, &parameter_data);    
+        find_all_strings(&input_data, &parameter_data);
     else
         error_invalid_operation();
 }

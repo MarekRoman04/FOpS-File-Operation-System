@@ -84,6 +84,52 @@ char **get_file_data(FILE **files, int file_count, long *file_length)
     return file_data;
 }
 
+// void get_f_parameter_file_data(struct data *data, FILE *file)
+// {
+//     int word_count = 0;
+//     char word[100];
+//     data->data = NULL;
+//     while (fscanf(file, "%99s", word) != EOF)
+//     {
+//         data->data = realloc(data->data, sizeof(char *) * (word_count + 1));
+//         if (data->data == NULL)
+//             alloc_error("get_f_parameter_file_data realloc_file_data");
+
+//         data->data[word_count] = (char *)malloc(strlen(word));
+//         if (data->data[word_count] == NULL)
+//             alloc_2d_error(word_count, "get_f_parameter_file_data");
+//         strcpy(data->data[word_count], word);
+//         ++word_count;
+//     }
+
+//     data->data_count = word_count;
+// }
+
+void get_f_parameter_file_data(struct data *data, FILE *file)
+{
+    int word_count = 0;
+    char word[100];
+    
+    while (fscanf(file, "%99s", word) != EOF)
+        ++word_count;
+    fseek(file, 0, SEEK_SET);
+    
+    data->data = (char **)malloc(sizeof(char *) * word_count);
+    if (data->data == NULL)
+        alloc_error("get_f_parameter_file_data realloc_file_data");
+
+    for (int i = 0; fscanf(file, "%99s", word) != EOF; ++i)
+    {
+
+        data->data[i] = (char *)malloc(strlen(word));
+        if (data->data[i] == NULL)
+            alloc_2d_error(i, "get_f_parameter_file_data");
+        strcpy(data->data[i], word);
+    }
+
+    data->data_count = word_count;
+}
+
 void get_parameter_files(struct files *files)
 {
     int found_files = 0;
