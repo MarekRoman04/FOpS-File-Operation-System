@@ -9,6 +9,6 @@
 
 #include "./headers/structs.h"
 
-#define DEBUG true
+#define DEBUG false
 
 #endif

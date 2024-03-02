@@ -187,7 +187,7 @@ void find_string(struct data *input_data, struct data *parameter_data)
 
     if (DEBUG)
         print_found_data(input_data, parameter_data);
-
+    
     for (int i = 0; i < input_data->data_count; ++i)
     {
         int found_strings = 0;

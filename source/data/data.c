@@ -70,6 +70,7 @@ void get_string_data(struct data *data)
     data->data_count = found_strings;
     data->data = (char **)realloc(data->data, sizeof(char *) * found_strings);
     data->data_paths = (char **)realloc(data->data_paths, sizeof(char *) * found_strings);
+    data->data_lengths = NULL;
 }
 
 long *get_string_data_lengths(char **data, int data_count)
@@ -127,6 +128,4 @@ void get_fs_parameter_data(struct data *data)
     if (!data->data_count && !string_data.data_count)
         error_missing_parameter();
     merge_data_struct(data, &string_data);
-
-    free_data(&string_data);
 }

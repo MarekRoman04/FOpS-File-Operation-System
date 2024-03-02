@@ -5,7 +5,7 @@
 void free_2d_array(void **arr, int e)
 {
     for (int i = 0; i < e; i++)
-        free(arr[i]);
+        free(arr[i]); 
     free(arr);
 }
 
