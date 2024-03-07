@@ -84,36 +84,15 @@ char **get_file_data(FILE **files, int file_count, long *file_length)
     return file_data;
 }
 
-// void get_f_parameter_file_data(struct data *data, FILE *file)
-// {
-//     int word_count = 0;
-//     char word[100];
-//     data->data = NULL;
-//     while (fscanf(file, "%99s", word) != EOF)
-//     {
-//         data->data = realloc(data->data, sizeof(char *) * (word_count + 1));
-//         if (data->data == NULL)
-//             alloc_error("get_f_parameter_file_data realloc_file_data");
-
-//         data->data[word_count] = (char *)malloc(strlen(word));
-//         if (data->data[word_count] == NULL)
-//             alloc_2d_error(word_count, "get_f_parameter_file_data");
-//         strcpy(data->data[word_count], word);
-//         ++word_count;
-//     }
-
-//     data->data_count = word_count;
-// }
-
 void get_f_parameter_file_data(struct data *data, FILE *file)
 {
     int word_count = 0;
     char word[100];
-    
+
     while (fscanf(file, "%99s", word) != EOF)
         ++word_count;
     fseek(file, 0, SEEK_SET);
-    
+
     data->data = (char **)malloc(sizeof(char *) * word_count);
     if (data->data == NULL)
         alloc_error("get_f_parameter_file_data realloc_file_data");
@@ -128,6 +107,56 @@ void get_f_parameter_file_data(struct data *data, FILE *file)
     }
 
     data->data_count = word_count;
+}
+
+void get_fsl_parameter_file_data(struct data *data, FILE *fp)
+{
+    char line[1000];
+    int line_count = 0;
+    int line_length;
+
+    while (fgets(line, sizeof(line), fp))
+        ++line_count;
+    fseek(fp, 0, SEEK_SET);
+    
+    data->data_count = line_count;
+
+    data->data = (char **)malloc(sizeof(char *) * line_count);
+    if (data->data == NULL)
+        alloc_error("get_fsl_parameter_data data");
+
+    for (int i = 0; i < line_count; ++i)
+    {
+        fgets(line, sizeof(line), fp);
+        int line_length = strlen(line);
+        if (line[line_length - 1] == '\n')
+        {
+            if (line[line_length - 2] == '\r')
+            {
+                data->data[i] = (char *)malloc(line_length - 2);
+                if (data->data[i] == NULL)
+                    alloc_2d_error(i, "get_fsl_parameter_data data_data");
+                memcpy(data->data[i], line, line_length - 2);
+                data->data[i][line_length - 2] = '\0';
+            }
+            else
+            {
+                data->data[i] = (char *)malloc(line_length - 1);
+                if (data->data[i] == NULL)
+                    alloc_2d_error(i, "get_fsl_parameter_data data_data");
+                memcpy(data->data[i], line, line_length - 1);
+                data->data[i][line_length - 1] = '\0';
+            }
+        }
+        else
+        {
+            data->data[i] = (char *)malloc(line_length);
+            if (data->data[i] == NULL)
+                alloc_2d_error(i, "get_fsl_parameter_data data_data");
+            strcpy(data->data[i], line);
+        }
+    }
+    fclose(fp);
 }
 
 void get_parameter_files(struct files *files)

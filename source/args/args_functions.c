@@ -30,12 +30,18 @@ void program_help()
     printf("-fAll\nFinds all occurencies of word or list of words\n");
     printf("<files> -fAll \"\'searched_word\'\"/<word_list>\n");
     printf("-fc\nChecks if text contains word or list of words, returns number of found words\n");
-    printf("-f, -fAll, -fc takes only 1 file or strings, other files or strings are ignored! ");
+    printf("-f, -fAll, -fc takes only 1 file or strings, other files or strings are ignored!\n");
     printf("<files> -fc \"\'searched_word\'\"/<word_list>\n");
     printf("-fs\nChecks if text contains string\n");
-    printf("<files> -f \"\'string\'\"/<string>\n");
+    printf("<files> -fs \"\'string\'\"/<string>\n");
     printf("-fsAll\nFinds all occurencies of string\n");
     printf("<files> -fsAll \"\'string\'\"/<string>\n");
+    printf("-fsl\nChecks if text contains strings from list of strings\n");
+    printf("<files> -fsl <string_list>\n");
+    printf("-fslc\nChecks if text contains strings from list of strings, returns number of found strings\n");
+    printf("<files> -fslc <string_list>\n");
+    printf("-fslA\nFinds all occurencies of strings from list of strings\n");
+    printf("<files> -fslA <string_list>\n");
     exit(EXIT_SUCCESS);
 }
 
@@ -168,7 +174,7 @@ void find_all_words(struct data *input_data, struct data *parameter_data)
 
             if (found_occurences)
             {
-                printf("%s %dx\n", parameter_data->data[j], found_occurences);
+                printf("%s %d x\n", parameter_data->data[j], found_occurences);
                 total_founds += found_occurences;
                 ++found_strings;
             }
@@ -187,7 +193,7 @@ void find_string(struct data *input_data, struct data *parameter_data)
 
     if (DEBUG)
         print_found_data(input_data, parameter_data);
-    
+
     for (int i = 0; i < input_data->data_count; ++i)
     {
         int found_strings = 0;
@@ -227,7 +233,83 @@ void find_all_strings(struct data *input_data, struct data *parameter_data)
                 index += data_string_len;
                 ++found_occurences;
             }
-            printf("%s %dx\n", parameter_data->data_paths[j], found_occurences);
+            printf("%s %d x\n", parameter_data->data_paths[j], found_occurences);
+            ++found_strings;
+        }
+    }
+}
+
+void find_string_list(struct data *input_data, struct data *parameter_data)
+{
+    parameter_data->get_data = &get_fsl_parameter_data;
+    parameter_data->get_data(parameter_data);
+
+    if (DEBUG)
+        print_f_found_data(input_data, parameter_data);
+
+    for (int i = 0; i < input_data->data_count; ++i)
+    {
+        int found_strings = 0;
+        printf("Searching: %s:\n", input_data->data_paths[i]);
+        for (int j = 0; j < parameter_data->data_count; ++j)
+        {
+            if (strstr(input_data->data[i], parameter_data->data[j]))
+            {
+                printf("%s\n", parameter_data->data[j]);
+                ++found_strings;
+            }
+        }
+        if (!found_strings)
+            printf("No strings found!\n");
+    }
+}
+
+void find_string_list_count(struct data *input_data, struct data *parameter_data)
+{
+    parameter_data->get_data = &get_fsl_parameter_data;
+    parameter_data->get_data(parameter_data);
+
+    if (DEBUG)
+        print_f_found_data(input_data, parameter_data);
+
+    for (int i = 0; i < input_data->data_count; ++i)
+    {
+        int found_strings = 0;
+        printf("Searching: %s:\n", input_data->data_paths[i]);
+        for (int j = 0; j < parameter_data->data_count; ++j)
+        {
+            if (strstr(input_data->data[i], parameter_data->data[j]))
+                ++found_strings;
+        }
+
+        printf("%d\n", found_strings);
+    }
+}
+
+void find_all_string_list(struct data *input_data, struct data *parameter_data)
+{
+    parameter_data->get_data = &get_fsl_parameter_data;
+    parameter_data->get_data(parameter_data);
+
+    if (DEBUG)
+        print_f_found_data(input_data, parameter_data);
+
+    for (int i = 0; i < input_data->data_count; ++i)
+    {
+        int found_strings = 0;
+        printf("Searching: %s:\n", input_data->data_paths[i]);
+        for (int j = 0; j < parameter_data->data_count; ++j)
+        {
+            char *index = input_data->data[i];
+            int data_string_len = strlen(parameter_data->data[j]);
+            int found_occurences = 0;
+            while ((index = strstr(index, parameter_data->data[j])) != NULL)
+            {
+                index += data_string_len;
+                ++found_occurences;
+            }
+            printf("%d x ", found_occurences);
+            printf("%s\n", parameter_data->data[j]);
             ++found_strings;
         }
     }

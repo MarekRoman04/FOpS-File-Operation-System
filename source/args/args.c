@@ -84,6 +84,12 @@ void start_operation()
         find_string(&input_data, &parameter_data);
     else if (!strcmp(operation, "-fsAll"))
         find_all_strings(&input_data, &parameter_data);
+    else if(!strcmp(operation, "-fsl"))
+        find_string_list(&input_data, &parameter_data);
+    else if(!strcmp(operation, "-fslc"))
+        find_string_list_count(&input_data, &parameter_data);
+    else if(!strcmp(operation, "-fslA"))
+        find_all_string_list(&input_data, &parameter_data);
     else
         error_invalid_operation();
 }

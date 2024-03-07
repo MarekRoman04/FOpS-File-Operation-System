@@ -129,3 +129,16 @@ void get_fs_parameter_data(struct data *data)
         error_missing_parameter();
     merge_data_struct(data, &string_data);
 }
+
+void get_fsl_parameter_data(struct data *data){
+    struct files parameter_files;
+    parameter_files.get_files = &get_parameter_files;
+    parameter_files.get_files(&parameter_files);
+    
+    if (parameter_files.file_count > 1)
+        printf("-fsl takes only 1 parameter file, ignoring other files!\n");
+    if (!parameter_files.file_count)
+        error_missing_parameter();
+    
+    get_fsl_parameter_file_data(data, parameter_files.fp_arr[0]);
+}

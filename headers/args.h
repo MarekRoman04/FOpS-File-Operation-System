@@ -23,5 +23,8 @@ void find_words_count(struct data *, struct data *);
 void find_all_words(struct data *, struct data *);
 void find_string(struct data *, struct data *);
 void find_all_strings(struct data *, struct data *);
+void find_string_list(struct data *, struct data *);
+void find_string_list_count(struct data *, struct data *);
+void find_all_string_list(struct data *, struct data *);
 
 #endif
