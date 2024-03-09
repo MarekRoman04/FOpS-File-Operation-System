@@ -36,10 +36,10 @@ void print_f_found_data(struct data *input_data, struct data *parameter_data)
     // printf("\n");
 
     printf("Parameter data found: %d\n", parameter_data->data_count);
-    printf("Data:\n");
-    for (int i = 0; i < parameter_data->data_count; ++i)
-        printf("%s\n", parameter_data->data[i]);
-    printf("\n");
+    // printf("Data:\n");
+    // for (int i = 0; i < parameter_data->data_count; ++i)
+    //     printf("%s\n", parameter_data->data[i]);
+    // printf("\n");
 }
 
 void print_string_data(struct data *data)

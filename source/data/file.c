@@ -112,23 +112,22 @@ void get_f_parameter_file_data(struct data *data, FILE *file)
 void get_fsl_parameter_file_data(struct data *data, FILE *fp)
 {
     char line[1000];
-    int line_count = 0;
-    int line_length;
+    size_t line_count = 0;
 
     while (fgets(line, sizeof(line), fp))
         ++line_count;
     fseek(fp, 0, SEEK_SET);
-    
+
     data->data_count = line_count;
 
     data->data = (char **)malloc(sizeof(char *) * line_count);
     if (data->data == NULL)
         alloc_error("get_fsl_parameter_data data");
-
+        
     for (int i = 0; i < line_count; ++i)
     {
         fgets(line, sizeof(line), fp);
-        int line_length = strlen(line);
+        size_t line_length = strlen(line) + 1;
         if (line[line_length - 1] == '\n')
         {
             if (line[line_length - 2] == '\r')
@@ -136,7 +135,7 @@ void get_fsl_parameter_file_data(struct data *data, FILE *fp)
                 data->data[i] = (char *)malloc(line_length - 2);
                 if (data->data[i] == NULL)
                     alloc_2d_error(i, "get_fsl_parameter_data data_data");
-                memcpy(data->data[i], line, line_length - 2);
+                strncpy(data->data[i], line, line_length - 3);
                 data->data[i][line_length - 2] = '\0';
             }
             else
@@ -144,8 +143,8 @@ void get_fsl_parameter_file_data(struct data *data, FILE *fp)
                 data->data[i] = (char *)malloc(line_length - 1);
                 if (data->data[i] == NULL)
                     alloc_2d_error(i, "get_fsl_parameter_data data_data");
-                memcpy(data->data[i], line, line_length - 1);
-                data->data[i][line_length - 1] = '\0';
+                strncpy(data->data[i], line, line_length - 1);
+                data->data[i][line_length - 2] = '\0';
             }
         }
         else
