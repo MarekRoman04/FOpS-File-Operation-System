@@ -79,3 +79,16 @@ void print_found_files(struct files *files)
         printf("%s ", files->file_paths[i]);
     printf("\n\n");
 }
+
+void print_input_data(struct data *data)
+{
+    printf("Input data found: %d\n", data->data_count);
+    printf("Length of data:\n");
+    for (int i = 0; i < data->data_count; ++i)
+        printf("%s: %d\n", data->data_paths[i], data->data_lengths[i]);
+    printf("\n");
+    // printf("Data:\n");
+    // for (int i = 0; i < data->data_count; ++i)
+    //     printf("%s\n", data->data[i]);
+    // printf("\n");
+}

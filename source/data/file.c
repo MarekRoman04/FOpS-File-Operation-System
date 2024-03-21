@@ -123,7 +123,7 @@ void get_fsl_parameter_file_data(struct data *data, FILE *fp)
     data->data = (char **)malloc(sizeof(char *) * line_count);
     if (data->data == NULL)
         alloc_error("get_fsl_parameter_data data");
-        
+
     for (int i = 0; i < line_count; ++i)
     {
         fgets(line, sizeof(line), fp);
@@ -202,4 +202,42 @@ void get_parameter_files(struct files *files)
             alloc_error("get_parameter_files realloc_file_paths");
     }
     files->file_count = found_files;
+}
+
+void copy_data(struct data *data)
+{
+    for (int i = 0; i < parameter_args.args_len; ++i)
+    {
+        FILE *fp = fopen(parameter_args.args[i], "ab");
+        if (fp == NULL)
+            printf("Error opening/creating %s file.\n", parameter_args.args[i]);
+
+        for (int j = 0; j < data->data_count; ++j)
+        {
+            fputc('\n', fp);
+            fwrite(data->data[j], sizeof(char), data->data_lengths[j], fp);
+        }
+
+        fclose(fp);
+    }
+}
+
+void merge_data(struct data *data)
+{
+    if (parameter_args.args_len > 1)
+        printf("-m writes to only 1 file, other entered file paths being ignored!\n");
+
+    FILE *fp = fopen(parameter_args.args[0], "wb");
+    if (fp == NULL)
+    {
+        printf("Error creating file!");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int j = 0; j < data->data_count; ++j)
+    {
+        fwrite(data->data[j], sizeof(char), data->data_lengths[j], fp);
+        fputc('\n', fp);
+    }
+    fclose(fp);
 }

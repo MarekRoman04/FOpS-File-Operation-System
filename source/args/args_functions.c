@@ -24,24 +24,28 @@ void program_help()
 {
     printf("%s %s\n", PROGRAM_NAME, PROGRAM_VERSION);
     printf("Command list: \n");
-    printf("--version\nPrints program version\n");
+    printf("--version\nPrints program version\n\n");
     printf("-f\nChecks if text contains word or list of words\n");
-    printf("<files> -f \"\'searched_word\'\"/<word_list>\n");
+    printf("<files> -f \"\'searched_word\'\"/<word_list>\n\n");
     printf("-fAll\nFinds all occurencies of word or list of words\n");
-    printf("<files> -fAll \"\'searched_word\'\"/<word_list>\n");
+    printf("<files> -fAll \"\'searched_word\'\"/<word_list>\n\n");
     printf("-fc\nChecks if text contains word or list of words, returns number of found words\n");
-    printf("-f, -fAll, -fc takes only 1 file or strings, other files or strings are ignored!\n");
     printf("<files> -fc \"\'searched_word\'\"/<word_list>\n");
+    printf("-f, -fAll, -fc takes only 1 file or strings, other files or strings are ignored!\n\n");
     printf("-fs\nChecks if text contains string\n");
-    printf("<files> -fs \"\'string\'\"/<string>\n");
+    printf("<files> -fs \"\'string\'\"/<string>\n\n");
     printf("-fsAll\nFinds all occurencies of string\n");
-    printf("<files> -fsAll \"\'string\'\"/<string>\n");
+    printf("<files> -fsAll \"\'string\'\"/<string>\n\n");
     printf("-fsl\nChecks if text contains strings from list of strings\n");
-    printf("<files> -fsl <string_list>\n");
+    printf("<files> -fsl <string_list>\n\n");
     printf("-fslc\nChecks if text contains strings from list of strings, returns number of found strings\n");
-    printf("<files> -fslc <string_list>\n");
+    printf("<files> -fslc <string_list>\n\n");
     printf("-fslA\nFinds all occurencies of strings from list of strings\n");
-    printf("<files> -fslA <string_list>\n");
+    printf("<files> -fslA <string_list>\n\n");
+    printf("-c\nCopies content of file to end of given files\n");
+    printf("<copied_files> -c <destination_file>\n\n");
+    printf("-m\nMerges given files into single file\n");
+    printf("<merged_files> -m <destination_file>\n\n");
     exit(EXIT_SUCCESS);
 }
 
@@ -156,7 +160,6 @@ void find_all_words(struct data *input_data, struct data *parameter_data)
         {
             int found_occurences = 0;
             char *index = input_data->data[i];
-            bool is_word = false;
             while ((index = strstr(index, parameter_data->data[j])) != NULL)
             {
                 bool word_start = index == input_data->data[i] || *(index - 1) == ' ' || *(index - 1) == '\n' || *(index - 1) == '\t' ? true : false;
@@ -313,4 +316,15 @@ void find_all_string_list(struct data *input_data, struct data *parameter_data)
             ++found_strings;
         }
     }
+}
+
+void copy_files(struct data *input_data)
+{
+    print_input_data(input_data);
+    copy_data(input_data);
+}
+
+void merge_files(struct data *input_data){
+    print_input_data(input_data);
+    merge_data(input_data);
 }

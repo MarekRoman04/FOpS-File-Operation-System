@@ -6,7 +6,7 @@
 
 struct args input_args;
 struct args parameter_args;
-char operation[5];
+char operation[6];
 
 void get_args(struct args *args, int start_index, int end_index, char *argv[])
 {
@@ -90,6 +90,10 @@ void start_operation()
         find_string_list_count(&input_data, &parameter_data);
     else if(!strcmp(operation, "-fslA"))
         find_all_string_list(&input_data, &parameter_data);
+    else if(!strcmp(operation, "-c"))
+        copy_files(&input_data);
+    else if(!strcmp(operation, "-m"))
+        merge_files(&input_data);
     else
         error_invalid_operation();
 }

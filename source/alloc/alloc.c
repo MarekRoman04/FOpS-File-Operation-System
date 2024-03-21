@@ -4,7 +4,7 @@
 
 void free_2d_array(void **arr, int e)
 {
-    for (int i = 0; i < e; i++)
+    for (int i = 0; i < e; ++i)
         free(arr[i]); 
     free(arr);
 }
@@ -17,7 +17,7 @@ void free_args(struct args *args)
 void free_files(struct files *files)
 {
     free(files->fp_arr);
-    free_2d_array((void **)files->file_paths, files->file_count);
+    free_2d_array((void**)files->file_paths, files->file_count);
 }
 
 void free_data(struct data *data)

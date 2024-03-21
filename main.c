@@ -1,7 +1,7 @@
 #include "./master_header.h"
 #include "./headers/args.h"
 
-const char *PROGRAM_VERSION = "0.3.1 Alpha";
+const char *PROGRAM_VERSION = "1.0.0";
 const char *PROGRAM_NAME = "FOpS (File-Operation-System)";
 
 int main(int argc, char *argv[])

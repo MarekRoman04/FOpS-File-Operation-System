@@ -26,5 +26,7 @@ void find_all_strings(struct data *, struct data *);
 void find_string_list(struct data *, struct data *);
 void find_string_list_count(struct data *, struct data *);
 void find_all_string_list(struct data *, struct data *);
+void copy_files(struct data *);
+void merge_files(struct data *);
 
 #endif

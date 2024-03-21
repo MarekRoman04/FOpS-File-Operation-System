@@ -24,5 +24,6 @@ void print_f_found_data(struct data *, struct data *);
 void print_string_data(struct data *);
 void print_args(struct args *, struct args *, char [5]);
 void print_found_files(struct files *);
+void print_input_data(struct data *);
 
 #endif

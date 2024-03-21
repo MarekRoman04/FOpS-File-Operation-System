@@ -19,5 +19,8 @@ long *get_file_lengths(FILE **, int);
 
 char **get_file_data(FILE **, int, long *);
 
+void copy_data(struct data *);
+
+void merge_data(struct data *);
 
 #endif
